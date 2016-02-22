@@ -160,6 +160,8 @@ public class Login extends Activity {
         catch(Exception e)
         {
             Log.e("Fail 3",code  + " " +  e.toString());
+            Toast.makeText(getBaseContext(), "Sorry, Try Again " + result,
+                    Toast.LENGTH_LONG).show();
         }
     }
 

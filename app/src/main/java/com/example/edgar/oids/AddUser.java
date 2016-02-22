@@ -58,16 +58,15 @@ public class AddUser extends ActionBarActivity {
     private String username;
     private String level;
     ArrayList<String> array = new ArrayList();
-    private String idNumber;
-    private String firstName;
-    private String lastName;
-    private String contactNumber;
-    private String eFirstName;
-    private String eLastName;
-    private String userLevel;
-    private String extra1;
-    private String extra2;
-    private String extra3;
+    private String idNumber = null;
+    private String firstName = null;
+    private String lastName = null;
+    private String contactNumber = null;
+    private String eFirstName = null;
+    private String eLastName = null;
+    private String userLevel = null;
+    private String userType = null;
+    private String extra = null;
 
     private ArrayList<String> postTo = new ArrayList();
     private String postToFull = null;
@@ -80,6 +79,7 @@ public class AddUser extends ActionBarActivity {
     private String[] studentArray = new String[]{"COURSE","BSIT","BSIE","BSTE","BSME","BSECE"};
     private String[] employeeArray = new String[]{"POSITION","TEACHER","STAFF","LIBRARY","SAO","GUIDANCE", "PASTORAL ANIMATOR",
     "DEAN", "RECTOR", "CENSOR", "TECH"};
+    private String[] chairArray = new String[]{"DEPT","BSIT","BSIE","BSTE","BSME","BSECE"};
 
 
 
@@ -121,6 +121,9 @@ public class AddUser extends ActionBarActivity {
         final ArrayAdapter<String> employeeAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, employeeArray);
 
+        final ArrayAdapter<String> chairAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, chairArray);
+
         Button add = (Button)findViewById(R.id.addButton);
 
         r_low.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +133,25 @@ public class AddUser extends ActionBarActivity {
                 r_extra2.setText("Employee");
                 r_extra2.setVisibility(View.VISIBLE);
                 s_extra3.setAdapter(studentAdapter);
+            }
+        });
+
+        r_mid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                r_extra1.setText("Chairperson");
+                r_extra2.setText("Employee");
+                r_extra2.setVisibility(View.VISIBLE);
+                s_extra3.setAdapter(chairAdapter);
+            }
+        });
+
+        r_high.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                r_extra1.setText("Employee");
+                r_extra2.setVisibility(View.INVISIBLE);
+                s_extra3.setAdapter(employeeAdapter);
             }
         });
 
@@ -153,6 +175,7 @@ public class AddUser extends ActionBarActivity {
                 else if(r_mid.isChecked() == true){
                     r_extra1.setText("Chairperson");
                     r_extra2.setText("Employee");
+                    s_extra3.setAdapter(chairAdapter);
                 }
             }
         });
@@ -172,257 +195,69 @@ public class AddUser extends ActionBarActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //idNumber =.getText().toString();
-                int month = 0;//d_endDate.getMonth();
-                int currentmonth = month + 1;
-                String monthString = null;
-                switch (currentmonth) {
-                    case 1:
-                        monthString = "01";
-                        break;
-                    case 2:
-                        monthString = "02";
-                        break;
-                    case 3:
-                        monthString = "03";
-                        break;
-                    case 4:
-                        monthString = "04";
-                        break;
-                    case 5:
-                        monthString = "05";
-                        break;
-                    case 6:
-                        monthString = "06";
-                        break;
-                    case 7:
-                        monthString = "07";
-                        break;
-                    case 8:
-                        monthString = "08";
-                        break;
-                    case 9:
-                        monthString = "09";
-                        break;
-                    case 10:
-                        monthString = "10";
-                        break;
-                    case 11:
-                        monthString = "11";
-                        break;
-                    case 12:
-                        monthString = "12";
-                        break;
-                }
-                int day = 0;//d_endDate.getDayOfMonth();
-                String dayString = null;
-                switch (day) {
-                    case 1:
-                        dayString = "01";
-                        break;
-                    case 2:
-                        dayString = "02";
-                        break;
-                    case 3:
-                        dayString = "03";
-                        break;
-                    case 4:
-                        dayString = "04";
-                        break;
-                    case 5:
-                        dayString = "05";
-                        break;
-                    case 6:
-                        dayString = "06";
-                        break;
-                    case 7:
-                        dayString = "07";
-                        break;
-                    case 8:
-                        dayString = "08";
-                        break;
-                    case 9:
-                        dayString = "09";
-                        break;
-                    case 10:
-                        dayString = "10";
-                        break;
-                    case 11:
-                        dayString = "11";
-                        break;
-                    case 12:
-                        dayString = "12";
-                        break;
-                    case 13:
-                        dayString = "13";
-                        break;
-                    case 14:
-                        dayString = "14";
-                        break;
-                    case 15:
-                        dayString = "15";
-                        break;
-                    case 16:
-                        dayString = "16";
-                        break;
-                    case 17:
-                        dayString = "17";
-                        break;
-                    case 18:
-                        dayString = "18";
-                        break;
-                    case 19:
-                        dayString = "19";
-                        break;
-                    case 20:
-                        dayString = "20";
-                        break;
-                    case 21:
-                        dayString = "21";
-                        break;
-                    case 22:
-                        dayString = "22";
-                        break;
-                    case 23:
-                        dayString = "23";
-                        break;
-                    case 24:
-                        dayString = "24";
-                        break;
-                    case 25:
-                        dayString = "25";
-                        break;
-                    case 26:
-                        dayString = "26";
-                        break;
-                    case 27:
-                        dayString = "27";
-                        break;
-                    case 28:
-                        dayString = "28";
-                        break;
-                    case 29:
-                        dayString = "29";
-                        break;
-                    case 30:
-                        dayString = "30";
-                        break;
-                    case 31:
-                        dayString = "31";
-                        break;
-                }
-                /*endDate = d_endDate.getYear() + "-" + monthString + "-" + dayString;
+                idNumber = e_idnumber.getText().toString();
+                firstName = e_first_name.getText().toString();
+                lastName = e_last_name.getText().toString();
+                contactNumber = e_contact.getText().toString();
+                eFirstName = e_e_first_name.getText().toString();
+                eLastName = e_e_last_name.getText().toString();
 
-                Toast.makeText(getBaseContext(), endDate,
-                        Toast.LENGTH_SHORT).show();
-
-
-                details = e_details.getText().toString();
-                if (c_sao.isChecked() == true) {
-                    postTo.add("student affairs");
+                if(r_low.isChecked() == true){
+                    userLevel = "low";
+                    if(r_extra1.isChecked() == true){
+                        userType = "student";
+                        extra = studentArray[s_extra3.getSelectedItemPosition()];
+                    }
+                    else if(r_extra2.isChecked() == true){
+                        userType = "employee";
+                        extra = employeeArray[s_extra3.getSelectedItemPosition()];
+                    }
                 }
-                if (c_faculty.isChecked() == true) {
-                    postTo.add("faculty");
+                else if(r_mid.isChecked() == true){
+                    userLevel = "mid";
+                    if(r_extra1.isChecked() == true){
+                        userType = "chairperson";
+                        extra = "chairperson " + chairArray[s_extra3.getSelectedItemPosition()];
+                    }
+                    else if(r_extra2.isChecked() == true){
+                        userType = "employee";
+                        extra = employeeArray[s_extra3.getSelectedItemPosition()];
+                    }
                 }
-                if (c_dean.isChecked() == true) {
-                    postTo.add("dean");
+                else if(r_tech.isChecked() == true){
+                    userLevel = "tech";
+                    userType = "employee";
+                    extra = employeeArray[s_extra3.getSelectedItemPosition()];
                 }
-                if (c_guidance.isChecked() == true) {
-                    postTo.add("guidance");
+                else if(r_high.isChecked() == true){
+                    userLevel = "high";
+                    userType = "employee";
+                    extra = employeeArray[s_extra3.getSelectedItemPosition()];
                 }
-                if (c_pastoral.isChecked() == true) {
-                    postTo.add("pastoral animation");
-                }
-                if (c_library.isChecked() == true) {
-                    postTo.add("library");
-                }
-                if (c_trc.isChecked() == true) {
-                    postTo.add("training and research");
-                }
-                if (c_it.isChecked() == true) {
-                    postTo.add("i.t. student org");
-                }
-                if (c_ie.isChecked() == true) {
-                    postTo.add("i.e. student org");
-                }
-                if (c_te.isChecked() == true) {
-                    postTo.add("t.e. student org");
-                }
-                if (c_me.isChecked() == true) {
-                    postTo.add("m.e. student org");
-                }
-                if (c_ece.isChecked() == true) {
-                    postTo.add("e.c.e. student org");
-                }
-
-                if (c_all.isChecked() == true) {
-                    viewableTo.add("all");
-                }
-                if (c_employee.isChecked() == true) {
-                    viewableTo.add("employees only");
-                }
-                if (c_viewFaculty.isChecked() == true) {
-                    viewableTo.add("faculty");
-                }
-                if (c_personVp.isChecked() == true) {
-                    viewableTo.add("personnel under vp of ed");
-                }
-                if (c_personRector.isChecked() == true) {
-                    viewableTo.add("personnel under rector");
-                }
-
-                if (r_sao.isChecked() == true) {
-                    confirmBy = "student affairs officer";
-                } else if (r_pastoral.isChecked() == true) {
-                    confirmBy = "pastoral animator";
-                } else if (r_chairperson.isChecked() == true) {
-                    confirmBy = "chairpersons";
-                } else if (r_dean.isChecked() == true) {
-                    confirmBy = "dean";
-                } else if (r_rector.isChecked() == true) {
-                    confirmBy = "rector";
-                }*/
-
-                //insertARF();
+                insertUser();
             }
         });
 
     }
 
-   /* private void insertARF(){
+    private void insertUser(){
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-
         nameValuePairs.add(new BasicNameValuePair("user", username));
-        nameValuePairs.add(new BasicNameValuePair("title", title));
-        nameValuePairs.add(new BasicNameValuePair("end", endDate));
-        nameValuePairs.add(new BasicNameValuePair("details", details));
-        if(postTo.size() == 0){
-            postToFull = null;
-        }else{
-            postToFull = postTo.get(0);
-            for(int i=1;i<postTo.size();i++){
-                postToFull = postToFull + ", " + postTo.get(i);
-            }
-        }
-        if(viewableTo.size() == 0){
-            viewableToFull = null;
-        }else{
-            viewableToFull = viewableTo.get(0);
-            for(int j=1;j<viewableTo.size();j++){
-                viewableToFull = viewableToFull + ", " + viewableTo.get(j);
-            }
-        }
-
-        nameValuePairs.add(new BasicNameValuePair("confirmBy", confirmBy));
-        nameValuePairs.add(new BasicNameValuePair("postTo", postToFull));
-        nameValuePairs.add(new BasicNameValuePair("viewableTo", viewableToFull));
-
+        nameValuePairs.add(new BasicNameValuePair("id_number", idNumber));
+        nameValuePairs.add(new BasicNameValuePair("first_name", firstName));
+        nameValuePairs.add(new BasicNameValuePair("last_name", lastName));
+        nameValuePairs.add(new BasicNameValuePair("contact_number", contactNumber));
+        nameValuePairs.add(new BasicNameValuePair("e_first_name", eFirstName));
+        nameValuePairs.add(new BasicNameValuePair("e_last_name", eLastName));
+        nameValuePairs.add(new BasicNameValuePair("user_level", userLevel));
+        nameValuePairs.add(new BasicNameValuePair("user_type", userType));
+        nameValuePairs.add(new BasicNameValuePair("extra", extra));
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_insert_arf.php");
-            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_insert_arf.php");
-            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/select.php");
+            //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_insert_user.php");
+            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_insert_user.php");
+            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_insert_user.php");
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
@@ -454,37 +289,61 @@ public class AddUser extends ActionBarActivity {
                 code = json_data.getInt("code");
 
                 switch(code){
-                    case 1:Toast.makeText(getBaseContext(), "Successfully created ARF",
+                    case 1:Toast.makeText(getBaseContext(), "Successfully added User",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 2:Toast.makeText(getBaseContext(), "Missing Title",
+                    case 2:Toast.makeText(getBaseContext(), "Missing Id Number",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 4:Toast.makeText(getBaseContext(), "Missing Details",
+                    case 3:Toast.makeText(getBaseContext(), "Missing First Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 5:Toast.makeText(getBaseContext(), "Missing Post To",
+                    case 4:Toast.makeText(getBaseContext(), "Missing Last Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 6:Toast.makeText(getBaseContext(), "Missing Viewable To",
+                    case 5:Toast.makeText(getBaseContext(), "Missing Contact Number",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 7:Toast.makeText(getBaseContext(), "Missing Confirm By",
+                    case 6:Toast.makeText(getBaseContext(), "Missing Emergency First Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 9:Toast.makeText(getBaseContext(), "Missing Title, Details",
+                    case 7:Toast.makeText(getBaseContext(), "Missing Emergency Last Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 10:Toast.makeText(getBaseContext(), "Missing Title, Details, Post To",
+                    case 8:Toast.makeText(getBaseContext(), "Missing Id Number, First Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 11:Toast.makeText(getBaseContext(), "Missing Title, Details, Post To, Viewable To",
+                    case 9:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 12:Toast.makeText(getBaseContext(), "Missing Title, Details, Post To, Viewable To, Confirm By",
+                    case 10:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name, Contact Number",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 17:Toast.makeText(getBaseContext(), "Missing Details, Post To",
+                    case 11:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name, Contact Number, Emergency First Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 18:Toast.makeText(getBaseContext(), "Missing Details, Post To, Viewable To",
+                    case 12:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name, Contact Number, Emergency First Name, Emergency Last Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 19:Toast.makeText(getBaseContext(), "Missing Details, Post To, Viewable To, Confirm By",
+                    case 13:Toast.makeText(getBaseContext(), "Missing First Name, Last Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 20:Toast.makeText(getBaseContext(), "Missing Post To, Viewable To",
+                    case 14:Toast.makeText(getBaseContext(), "Missing First Name, Last Name, Contact Number",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 21:Toast.makeText(getBaseContext(), "Missing Post To, Viewable To, Confirm By",
+                    case 15:Toast.makeText(getBaseContext(), "Missing First Name, Last Name, Contact Number, Emergency First Name",
                             Toast.LENGTH_SHORT).show(); break;
-                    case 22:Toast.makeText(getBaseContext(), "Missing Viewable To, Confirm by",
+                    case 16:Toast.makeText(getBaseContext(), "Missing First Name, Last Name, Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 17:Toast.makeText(getBaseContext(), "Missing Last Name, Contact Number",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 18:Toast.makeText(getBaseContext(), "Missing Last Name, Contact Number, Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 19:Toast.makeText(getBaseContext(), "Missing Last Name, Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 20:Toast.makeText(getBaseContext(), "Missing Contact Number, Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 21:Toast.makeText(getBaseContext(), "Missing Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 22:Toast.makeText(getBaseContext(), "Missing Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 111:Toast.makeText(getBaseContext(), "Successfully added Student",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 112:Toast.makeText(getBaseContext(), "Successfully added Employee",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 113:Toast.makeText(getBaseContext(), "Successfully added Chairperson",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 1111:Toast.makeText(getBaseContext(), "Successfully added Student & Log",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 1112:Toast.makeText(getBaseContext(), "Successfully added Employee & Log",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 1113:Toast.makeText(getBaseContext(), "Successfully added Chairperson & Log",
                             Toast.LENGTH_SHORT).show(); break;
                     default:Toast.makeText(getBaseContext(), result,
                             Toast.LENGTH_SHORT).show();break;
@@ -499,8 +358,8 @@ public class AddUser extends ActionBarActivity {
             Toast.makeText(getApplicationContext(), "Invalid IP Address",
                     Toast.LENGTH_LONG).show();
         }
-        //return level;
-    }*/
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -3,6 +3,7 @@ package com.example.edgar.oids;
 //import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -111,6 +112,14 @@ public class ChangePassword extends ActionBarActivity {
             String result = EntityUtils.toString(entity, HTTP.UTF_8);
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.setMessage(result);
             alertDialog.show();
