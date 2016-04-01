@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.edgar.oids">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission
+        android:required="true"
+        android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +26,9 @@
         <activity android:name=".Announcements"></activity>
         <activity android:name=".CreateARF"></activity>
         <activity android:name=".AddUser"></activity>
+        <activity android:name=".ChangePin"></activity>
+        <activity android:name=".Reset"></activity>
+        <activity android:name=".CheckArf"></activity>
     </application>
 
 </manifest>
