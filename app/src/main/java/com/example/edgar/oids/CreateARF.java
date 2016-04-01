@@ -2,8 +2,6 @@ package com.example.edgar.oids;
 
 //import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -39,9 +36,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.StringTokenizer;
 
 public class CreateARF extends ActionBarActivity {
 
@@ -56,7 +52,7 @@ public class CreateARF extends ActionBarActivity {
     private String mActivityTitle;
     private String username;
     private String level;
-    ArrayList<String> array = new ArrayList();
+    private ArrayList<String> array = new ArrayList();
     private String title;
     private String endDate;
     private String details;
@@ -67,6 +63,56 @@ public class CreateARF extends ActionBarActivity {
     private String confirmBy = null;
     private String remarks;
     private int code;
+    private String category = null;
+    private String subType = null;
+    private String arf_id = null;
+    private String data = null;
+    private String select_title = null;
+    private String select_endDate = null;
+    private String select_details = null;
+    private String select_postTo = null;
+    private String select_viewTo = null;
+    private String select_confirmBy = null;
+    private String select_remarks = null;
+
+    private EditText e_title;
+    private DatePicker d_endDate;
+    private EditText e_details;
+    private CheckBox c_sao;
+    private CheckBox c_faculty;
+    private CheckBox c_dean;
+    private CheckBox c_guidance;
+    private CheckBox c_pastoral;
+    private CheckBox c_library;
+    private CheckBox c_trc;
+    private CheckBox c_it;
+    private CheckBox c_ie;
+    private CheckBox c_te;
+    private CheckBox c_me;
+    private CheckBox c_ece;
+    private CheckBox c_all;
+    private CheckBox c_employee;
+    private CheckBox c_viewFaculty;
+    private CheckBox c_personVp;
+    private CheckBox c_personRector;
+    private RadioButton r_sao;
+    private RadioButton r_pastoral;
+    private RadioButton r_chairperson;
+    private RadioButton r_dean;
+    private RadioButton r_rector;
+    private EditText e_remarks;
+    private StringTokenizer tokenizer;
+    private StringTokenizer view_tokenizer;
+    private ArrayList<String> select_post_to = new ArrayList();
+    private ArrayList<String> select_view_to = new ArrayList();
+    private String endDateDay = null;
+    private String endDateYear = null;
+    private String endDateMonth = null;
+    private String[] post_token;
+    private String[] view_token;
+    private String type = null;
+
+
 
 
 
@@ -77,6 +123,13 @@ public class CreateARF extends ActionBarActivity {
 
         username = getIntent().getExtras().getString("username");
         level = getIntent().getExtras().getString("level");
+        category = getIntent().getExtras().getString("category");
+        type = getIntent().getExtras().getString("type");
+
+        if(category.equals("arf details")){
+            arf_id = getIntent().getExtras().getString("arf_id");
+        }
+
 
         mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -87,171 +140,481 @@ public class CreateARF extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        final EditText e_title = (EditText)findViewById(R.id.titleEditText);
-        final DatePicker d_endDate = (DatePicker)findViewById(R.id.endDatePicker);
-        final EditText e_details = (EditText)findViewById(R.id.detailsEditText);
-        final CheckBox c_sao = (CheckBox)findViewById(R.id.saoCheckBox);
-        final CheckBox c_faculty = (CheckBox)findViewById(R.id.facultyCheckBox);
-        final CheckBox c_dean = (CheckBox)findViewById(R.id.deanCheckBox);
-        final CheckBox c_guidance = (CheckBox)findViewById(R.id.guidanceCheckBox);
-        final CheckBox c_pastoral = (CheckBox)findViewById(R.id.pastoralCheckBox);
-        final CheckBox c_library = (CheckBox)findViewById(R.id.libraryCheckBox);
-        final CheckBox c_trc = (CheckBox)findViewById(R.id.trcCheckBox);
-        final CheckBox c_it = (CheckBox)findViewById(R.id.bsitCheckBox);
-        final CheckBox c_ie = (CheckBox)findViewById(R.id.bsieCheckBox);
-        final CheckBox c_te = (CheckBox)findViewById(R.id.bsteCheckBox);
-        final CheckBox c_me = (CheckBox)findViewById(R.id.bsmeCheckBox);
-        final CheckBox c_ece = (CheckBox)findViewById(R.id.bseceCheckBox);
-        final CheckBox c_all = (CheckBox)findViewById(R.id.viewAllCheckBox);
-        final CheckBox c_employee = (CheckBox)findViewById(R.id.viewEmployeesCheckBox);
-        final CheckBox c_viewFaculty = (CheckBox)findViewById(R.id.viewFacultyCheckBox);
-        final CheckBox c_personVp = (CheckBox)findViewById(R.id.personVpCheckBox);
-        final CheckBox c_personRector = (CheckBox)findViewById(R.id.personRectorCheckBox);
-        final RadioButton r_sao = (RadioButton)findViewById(R.id.saoRadioButton);
-        final RadioButton r_pastoral = (RadioButton)findViewById(R.id.pastoralRadioButton);
-        final RadioButton r_chairperson = (RadioButton)findViewById(R.id.chairpersonRadioButton);
-        final RadioButton r_dean = (RadioButton)findViewById(R.id.deanRadioButton);
-        final RadioButton r_rector = (RadioButton)findViewById(R.id.rectorRadioButton);
+        e_title = (EditText)findViewById(R.id.titleEditText);
+        d_endDate = (DatePicker)findViewById(R.id.endDatePicker);
+        e_details = (EditText)findViewById(R.id.idNumberEditText);
+        c_sao = (CheckBox)findViewById(R.id.saoCheckBox);
+        c_faculty = (CheckBox)findViewById(R.id.facultyCheckBox);
+        c_dean = (CheckBox)findViewById(R.id.deanCheckBox);
+        c_guidance = (CheckBox)findViewById(R.id.guidanceCheckBox);
+        c_pastoral = (CheckBox)findViewById(R.id.pastoralCheckBox);
+        c_library = (CheckBox)findViewById(R.id.libraryCheckBox);
+        c_trc = (CheckBox)findViewById(R.id.trcCheckBox);
+        c_it = (CheckBox)findViewById(R.id.bsitCheckBox);
+        c_ie = (CheckBox)findViewById(R.id.bsieCheckBox);
+        c_te = (CheckBox)findViewById(R.id.bsteCheckBox);
+        c_me = (CheckBox)findViewById(R.id.bsmeCheckBox);
+        c_ece = (CheckBox)findViewById(R.id.bseceCheckBox);
+        c_all = (CheckBox)findViewById(R.id.viewAllCheckBox);
+        c_employee = (CheckBox)findViewById(R.id.viewEmployeesCheckBox);
+        c_viewFaculty = (CheckBox)findViewById(R.id.viewFacultyCheckBox);
+        c_personVp = (CheckBox)findViewById(R.id.personVpCheckBox);
+        c_personRector = (CheckBox)findViewById(R.id.personRectorCheckBox);
+        r_sao = (RadioButton)findViewById(R.id.saoRadioButton);
+        r_pastoral = (RadioButton)findViewById(R.id.pastoralRadioButton);
+        r_chairperson = (RadioButton)findViewById(R.id.chairpersonRadioButton);
+        r_dean = (RadioButton)findViewById(R.id.deanRadioButton);
+        r_rector = (RadioButton)findViewById(R.id.rectorRadioButton);
+        e_remarks = (EditText)findViewById(R.id.remarksEditText);
 
         Button submit = (Button)findViewById(R.id.submitButton);
+        Button draft = (Button)findViewById(R.id.saveDraftButton);
+        Button edit = (Button)findViewById(R.id.editSaveButton);
+        Button confirm = (Button)findViewById(R.id.confirmButton);
+        Button for_re_edit = (Button)findViewById(R.id.reeditButton);
+        Button reject = (Button)findViewById(R.id.rejectButton);
+        Button delete = (Button)findViewById(R.id.deleteButton);
+        Button cancel = (Button)findViewById(R.id.cancelButton);
 
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                title = e_title.getText().toString();
-                int month = d_endDate.getMonth();
-                int currentmonth = month + 1;
-                String monthString=null;
-                switch(currentmonth){
-                    case 1:monthString = "01";break;
-                    case 2:monthString = "02";break;
-                    case 3:monthString = "03";break;
-                    case 4:monthString = "04";break;
-                    case 5:monthString = "05";break;
-                    case 6:monthString = "06";break;
-                    case 7:monthString = "07";break;
-                    case 8:monthString = "08";break;
-                    case 9:monthString = "09";break;
-                    case 10:monthString = "10";break;
-                    case 11:monthString = "11";break;
-                    case 12:monthString = "12";break;
-                }
-                int day = d_endDate.getDayOfMonth();
-                String dayString = null;
-                switch(day){
-                    case 1:dayString = "01";break;
-                    case 2:dayString = "02";break;
-                    case 3:dayString = "03";break;
-                    case 4:dayString = "04";break;
-                    case 5:dayString = "05";break;
-                    case 6:dayString = "06";break;
-                    case 7:dayString = "07";break;
-                    case 8:dayString = "08";break;
-                    case 9:dayString = "09";break;
-                    case 10:dayString = "10";break;
-                    case 11:dayString = "11";break;
-                    case 12:dayString = "12";break;
-                    case 13:dayString = "13";break;
-                    case 14:dayString = "14";break;
-                    case 15:dayString = "15";break;
-                    case 16:dayString = "16";break;
-                    case 17:dayString = "17";break;
-                    case 18:dayString = "18";break;
-                    case 19:dayString = "19";break;
-                    case 20:dayString = "20";break;
-                    case 21:dayString = "21";break;
-                    case 22:dayString = "22";break;
-                    case 23:dayString = "23";break;
-                    case 24:dayString = "24";break;
-                    case 25:dayString = "25";break;
-                    case 26:dayString = "26";break;
-                    case 27:dayString = "27";break;
-                    case 28:dayString = "28";break;
-                    case 29:dayString = "29";break;
-                    case 30:dayString = "30";break;
-                    case 31:dayString = "31";break;
-                }
-                endDate = d_endDate.getYear() + "-" + monthString + "-" + dayString;
+        if(category.equals("create")){
+            Log.e("2nd IF", category);
 
-                Toast.makeText(getBaseContext(), endDate,
-                        Toast.LENGTH_SHORT).show();
-
-
-
-                details = e_details.getText().toString();
-                if(c_sao.isChecked()== true){
-                    postTo.add("student affairs");
-                }
-                if(c_faculty.isChecked()== true){
-                    postTo.add("faculty");
-                }
-                if(c_dean.isChecked()== true){
-                    postTo.add("dean");
-                }
-                if(c_guidance.isChecked()== true){
-                    postTo.add("guidance");
-                }
-                if(c_pastoral.isChecked()== true){
-                    postTo.add("pastoral animation");
-                }
-                if(c_library.isChecked()== true){
-                    postTo.add("library");
-                }
-                if(c_trc.isChecked()== true){
-                    postTo.add("training and research");
-                }
-                if(c_it.isChecked()== true){
-                    postTo.add("i.t. student org");
-                }
-                if(c_ie.isChecked()== true){
-                    postTo.add("i.e. student org");
-                }
-                if(c_te.isChecked()== true){
-                    postTo.add("t.e. student org");
-                }
-                if(c_me.isChecked()== true){
-                    postTo.add("m.e. student org");
-                }
-                if(c_ece.isChecked()== true){
-                    postTo.add("e.c.e. student org");
-                }
-
-                if(c_all.isChecked() == true){
-                    viewableTo.add("all");
-                }
-                if(c_employee.isChecked() == true){
-                    viewableTo.add("employees only");
-                }
-                if(c_viewFaculty.isChecked() == true){
-                    viewableTo.add("faculty");
-                }
-                if(c_personVp.isChecked() == true){
-                    viewableTo.add("personnel under vp of ed");
-                }
-                if(c_personRector.isChecked() == true){
-                    viewableTo.add("personnel under rector");
-                }
-
-                if(r_sao.isChecked() == true){
-                    confirmBy = "student affairs officer";
-                }
-                else if(r_pastoral.isChecked() == true){
-                    confirmBy = "pastoral animator";
-                }
-                else if(r_chairperson.isChecked() == true){
-                    confirmBy = "chairpersons";
-                }
-                else if(r_dean.isChecked() == true){
-                    confirmBy = "dean";
-                }
-                else if(r_rector.isChecked() == true){
-                    confirmBy = "rector";
-                }
-
-                insertARF();
+            if(level.equals("low")){
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
             }
-        });
+            else if(level.equals("mid")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("high")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
 
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "submit";
+                    insertARF();
+                }
+            });
+
+            draft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "draft";
+                    insertARF();
+                }
+            });
+
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "edit";
+                    insertARF();
+                }
+            });
+
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "confirm";
+                    insertARF();
+                }
+            });
+
+            for_re_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "for re-edit";
+                    insertARF();
+                }
+            });
+
+            reject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "rejected";
+                    insertARF();
+                }
+            });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setInformation();
+                    category = "delete";
+                    insertARF();
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.exit(0);
+                }
+            });
+        }
+        else if(category.equals("arf details")){
+            if(level.equals("low") && type.equals("submitted")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+            else if(level.equals("low") && type.equals("drafts")){
+                //submit.setVisibility(View.GONE);
+                //draft.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+            else if(level.equals("low") && type.equals("for re-edit")){
+                //submit.setVisibility(View.GONE);
+                //draft.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+            else if(level.equals("low") && type.equals("rejected")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+                delete.setVisibility(View.GONE);
+            }
+            else if(level.equals("mid") && type.equals("received")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("mid") && type.equals("drafts")){
+                submit.setVisibility(View.GONE);
+                //draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("mid") && type.equals("for re-edit")){
+                //submit.setVisibility(View.GONE);
+                //draft.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("mid") && type.equals("rejected")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+            }
+            else if(level.equals("high") && type.equals("received")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("high") && type.equals("drafts")){
+                submit.setVisibility(View.GONE);
+                //draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("high") && type.equals("for re-edit")){
+                //submit.setVisibility(View.GONE);
+                //draft.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
+            }
+            else if(level.equals("high") && type.equals("rejected")){
+                submit.setVisibility(View.GONE);
+                draft.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+                confirm.setVisibility(View.GONE);
+                for_re_edit.setVisibility(View.GONE);
+                reject.setVisibility(View.GONE);
+            }
+            selectARFDetails();
+
+        }
+
+
+
+    }
+
+    private void setInformation(){
+        title = e_title.getText().toString();
+        int month = d_endDate.getMonth();
+        int currentmonth = month + 1;
+        String monthString=null;
+        switch(currentmonth){
+            case 1:monthString = "01";break;
+            case 2:monthString = "02";break;
+            case 3:monthString = "03";break;
+            case 4:monthString = "04";break;
+            case 5:monthString = "05";break;
+            case 6:monthString = "06";break;
+            case 7:monthString = "07";break;
+            case 8:monthString = "08";break;
+            case 9:monthString = "09";break;
+            case 10:monthString = "10";break;
+            case 11:monthString = "11";break;
+            case 12:monthString = "12";break;
+        }
+        int day = d_endDate.getDayOfMonth();
+        String dayString = null;
+        switch(day){
+            case 1:dayString = "01";break;
+            case 2:dayString = "02";break;
+            case 3:dayString = "03";break;
+            case 4:dayString = "04";break;
+            case 5:dayString = "05";break;
+            case 6:dayString = "06";break;
+            case 7:dayString = "07";break;
+            case 8:dayString = "08";break;
+            case 9:dayString = "09";break;
+            case 10:dayString = "10";break;
+            case 11:dayString = "11";break;
+            case 12:dayString = "12";break;
+            case 13:dayString = "13";break;
+            case 14:dayString = "14";break;
+            case 15:dayString = "15";break;
+            case 16:dayString = "16";break;
+            case 17:dayString = "17";break;
+            case 18:dayString = "18";break;
+            case 19:dayString = "19";break;
+            case 20:dayString = "20";break;
+            case 21:dayString = "21";break;
+            case 22:dayString = "22";break;
+            case 23:dayString = "23";break;
+            case 24:dayString = "24";break;
+            case 25:dayString = "25";break;
+            case 26:dayString = "26";break;
+            case 27:dayString = "27";break;
+            case 28:dayString = "28";break;
+            case 29:dayString = "29";break;
+            case 30:dayString = "30";break;
+            case 31:dayString = "31";break;
+        }
+        endDate = d_endDate.getYear() + "-" + monthString + "-" + dayString;
+
+        Toast.makeText(getBaseContext(), endDate,
+                Toast.LENGTH_SHORT).show();
+
+
+
+        details = e_details.getText().toString();
+        if(c_sao.isChecked()== true){
+            postTo.add("student affairs");
+        }
+        if(c_faculty.isChecked()== true){
+            postTo.add("faculty");
+
+        }
+        if(c_dean.isChecked()== true){
+            postTo.add("dean");
+        }
+        if(c_guidance.isChecked()== true){
+            postTo.add("guidance");
+        }
+        if(c_pastoral.isChecked()== true){
+            postTo.add("pastoral animation");
+        }
+        if(c_library.isChecked()== true){
+            postTo.add("library");
+        }
+        if(c_trc.isChecked()== true){
+            postTo.add("training and research");
+        }
+        if(c_it.isChecked()== true){
+            postTo.add("i.t. student org");
+        }
+        if(c_ie.isChecked()== true){
+            postTo.add("i.e. student org");
+        }
+        if(c_te.isChecked()== true){
+            postTo.add("t.e. student org");
+        }
+        if(c_me.isChecked()== true){
+            postTo.add("m.e. student org");
+        }
+        if(c_ece.isChecked()== true){
+            postTo.add("e.c.e. student org");
+        }
+
+        if(c_all.isChecked() == true){
+            viewableTo.add("all");
+        }
+        if(c_employee.isChecked() == true){
+            viewableTo.add("employees only");
+        }
+        if(c_viewFaculty.isChecked() == true){
+            viewableTo.add("faculty");
+        }
+        if(c_personVp.isChecked() == true){
+            viewableTo.add("personnel under vp of ed");
+        }
+        if(c_personRector.isChecked() == true){
+            viewableTo.add("personnel under rector");
+        }
+
+        if(r_sao.isChecked() == true){
+            confirmBy = "student affairs officer";
+        }
+        else if(r_pastoral.isChecked() == true){
+            confirmBy = "pastoral animator";
+        }
+        else if(r_chairperson.isChecked() == true){
+            confirmBy = "chairpersons";
+        }
+        else if(r_dean.isChecked() == true){
+            confirmBy = "dean";
+        }
+        else if(r_rector.isChecked() == true){
+            confirmBy = "rector";
+        }
+    }
+
+    private void setSelectedInformation(){
+        e_title.setText(select_title);
+        updateEndDate();
+        e_details.setText(select_details);
+        //Log.e("string", select_postTo);
+        post_token = select_postTo.split(",",12);
+        //Log.e("string2", post_token[1]);
+        postToTokenizer();
+        //view_token = select_viewTo.split(delim,5);
+        setConfirmBy();
+        e_remarks.setText(select_remarks);
+    }
+
+    private void setConfirmBy(){
+        if(select_confirmBy.equals("student affairs officer")){
+            r_sao.setChecked(true);
+        }
+        else if(select_confirmBy.equals("pastoral animator")){
+            r_pastoral.setChecked(true);
+        }
+        else if(select_confirmBy.equals("chairpersons")){
+            r_chairperson.setChecked(true);
+        }
+        else if(select_confirmBy.equals("dean")){
+            r_dean.setChecked(true);
+        }
+        else if(select_confirmBy.equals("rector")){
+            r_rector.setChecked(true);
+        }
+    }
+
+    private void viewToTokenizer(){
+        for(int i=0;i<view_token.length;i++){
+            if(view_token[i].equals("all")){
+                c_all.setChecked(true);
+            }
+            if(view_token[i].equals("employees only")){
+                c_employee.setChecked(true);
+            }
+            if(view_token[i].equals("faculty")){
+                c_viewFaculty.setChecked(true);
+            }
+            if(view_token[i].equals("personnel under vp of ed")){
+                c_personVp.setChecked(true);
+            }
+            if(view_token[i].equals("personnel under rector")) {
+                c_personRector.setChecked(true);
+            }
+        }
+    }
+
+    private void postToTokenizer(){
+        for(int i=0;i<post_token.length;i++){
+            if(post_token[i].equals("student affairs")){
+                c_sao.setChecked(true);
+            }
+            if(post_token[i].equals("faculty")){
+                c_faculty.setChecked(true);
+            }
+            if(post_token[i].equals("dean")){
+                c_dean.setChecked(true);
+            }
+            if(post_token[i].equals("guidance")){
+                c_guidance.setChecked(true);
+            }
+            if(post_token[i].equals("pastoral animation")){
+                c_pastoral.setChecked(true);
+            }
+            if(post_token[i].equals("library")){
+                c_library.setChecked(true);
+            }
+            if(post_token[i].equals("training and research")){
+                c_trc.setChecked(true);
+            }
+            if(post_token[i].equals("i.t. student org")){
+                c_it.setChecked(true);
+            }
+            if(post_token[i].equals("i.e. student org")){
+                c_ie.setChecked(true);
+            }
+            if(post_token[i].equals("t.e. student org")){
+                c_te.setChecked(true);
+            }
+            if(post_token[i].equals("m.e. student org")){
+                c_me.setChecked(true);
+            }
+            if(post_token[i].equals("e.c.e. student org")){
+                c_ece.setChecked(true);
+            }
+        }
+    }
+
+    private void updateEndDate()
+    {
+        String day  = /*Integer.parseInt(*/endDateDay.substring(8, 10)/*)*/;
+        int dayInt = Integer.parseInt(day);
+        Toast.makeText(getApplicationContext(), "day "+ day,
+                Toast.LENGTH_LONG).show();
+        int year = Integer.parseInt(endDateYear.substring(0, 4));
+        Toast.makeText(getApplicationContext(), "year "+ year,
+                Toast.LENGTH_LONG).show();
+        String month = endDateMonth.substring(5,7);
+        int month_code = getMonthInt(month);
+        Toast.makeText(getApplicationContext(), "month "+month,
+                Toast.LENGTH_LONG).show();
+
+        d_endDate.updateDate(year, month_code, dayInt);
+    }
+
+    private int getMonthInt(String month) {
+        if (month.equalsIgnoreCase("01")) return 0;
+        if (month.equalsIgnoreCase("02")) return 1;
+        if (month.equalsIgnoreCase("03")) return 2;
+        if (month.equalsIgnoreCase("04")) return 3;
+        if (month.equalsIgnoreCase("05")) return 4;
+        if (month.equalsIgnoreCase("06")) return 5;
+        if (month.equalsIgnoreCase("07")) return 6;
+        if (month.equalsIgnoreCase("08")) return 7;
+        if (month.equalsIgnoreCase("09")) return 8;
+        if (month.equalsIgnoreCase("10")) return 9;
+        if (month.equalsIgnoreCase("11")) return 10;
+        if (month.equalsIgnoreCase("12")) return 11;
+
+        //return -1 if month code not found
+        return -1;
     }
 
     private void insertARF(){
@@ -261,12 +624,13 @@ public class CreateARF extends ActionBarActivity {
         nameValuePairs.add(new BasicNameValuePair("title", title));
         nameValuePairs.add(new BasicNameValuePair("end", endDate));
         nameValuePairs.add(new BasicNameValuePair("details", details));
+
         if(postTo.size() == 0){
             postToFull = null;
         }else{
             postToFull = postTo.get(0);
             for(int i=1;i<postTo.size();i++){
-                postToFull = postToFull + ", " + postTo.get(i);
+                postToFull = postToFull + "," + postTo.get(i);
             }
         }
         if(viewableTo.size() == 0){
@@ -274,13 +638,15 @@ public class CreateARF extends ActionBarActivity {
         }else{
             viewableToFull = viewableTo.get(0);
             for(int j=1;j<viewableTo.size();j++){
-                viewableToFull = viewableToFull + ", " + viewableTo.get(j);
+                viewableToFull = viewableToFull + "," + viewableTo.get(j);
             }
         }
 
         nameValuePairs.add(new BasicNameValuePair("confirmBy", confirmBy));
         nameValuePairs.add(new BasicNameValuePair("postTo", postToFull));
         nameValuePairs.add(new BasicNameValuePair("viewableTo", viewableToFull));
+        nameValuePairs.add(new BasicNameValuePair("remarks", remarks));
+        nameValuePairs.add(new BasicNameValuePair("category", category));
 
 
         try {
@@ -365,6 +731,114 @@ public class CreateARF extends ActionBarActivity {
                     Toast.LENGTH_LONG).show();
         }
         //return level;
+    }
+
+    private void selectARFDetails(){
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
+        nameValuePairs.add(new BasicNameValuePair("user", username));
+        nameValuePairs.add(new BasicNameValuePair("arf_id", arf_id));
+
+
+
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_insert_arf.php");
+            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_select_arf_details.php");
+            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/select.php");
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+
+            String result = EntityUtils.toString(entity, HTTP.UTF_8);
+
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            alertDialog.setMessage(result);
+
+            alertDialog.show();
+
+
+
+            Toast.makeText(getBaseContext(), result,
+                    Toast.LENGTH_SHORT).show();
+
+            Log.e("pass 1", "connection success ");
+            try {
+                JSONArray json_array = new JSONArray(result);
+                int modulus;
+                for (int i = 0; i < json_array.length(); i++) {
+                    modulus = i % 7;
+                    if(modulus == 0){
+                        select_title = json_array.optString(i);
+                        e_title.setText(select_title);
+                        Log.e("modulus0 ", "was here");
+                    }
+                    if(modulus == 1){
+                        select_endDate = json_array.optString(i);
+                        endDateDay = json_array.optString(i);
+                        endDateMonth = json_array.optString(i);
+                        endDateYear = json_array.optString(i);
+                        Log.e("modulus1 ", "was here");
+                        updateEndDate();
+                        Log.e("after updateDate ", "was here");
+                    }
+                    if(modulus == 2){
+                        select_details = json_array.optString(i);
+                        e_details.setText(select_details);
+                        Log.e("modulus2 ", "was here");
+                    }
+                    if(modulus == 3){
+                        select_postTo = json_array.optString(i);
+                        post_token = select_postTo.split(",", 12);
+                        Log.e("modulus3 ", "was here");
+                        postToTokenizer();
+                        Log.e("after post token ", "was here");
+                    }
+                    if(modulus == 4){
+                        select_viewTo = json_array.optString(i);
+                        view_token = select_viewTo.split(",", 5);
+                        Log.e("modulus4 ", "was here");
+                        viewToTokenizer();
+                        Log.e("after view token", "was here");
+                    }
+                    if(modulus == 5){
+                        select_confirmBy = json_array.optString(i);
+                        Log.e("modulus5 ", "was here");
+                        setConfirmBy();
+                        Log.e("after set confirmby ", "was here");
+
+                    }
+                    if(modulus == 6){
+                        select_remarks = json_array.optString(i);
+                        e_remarks.setText(select_remarks);
+                        Log.e("modulus6 ", "was here");
+                    }
+
+
+                }
+
+
+            } catch (ArrayIndexOutOfBoundsException a){
+                Log.e("array outbound", a.getLocalizedMessage());
+            } catch (Exception e) {
+                Log.e("details Fail 2", e.toString());
+            }
+
+        } catch (Exception e) {
+            Log.e("Fail 1", e.toString());
+            Toast.makeText(getApplicationContext(), "Invalid IP Address",
+                    Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

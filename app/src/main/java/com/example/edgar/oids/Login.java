@@ -45,7 +45,7 @@ public class Login extends Activity {
         final EditText e_pass=(EditText) findViewById(R.id.passwordEditText);
 
         Button signIn=(Button) findViewById(R.id.signInButton);
-        Button exit=(Button) findViewById(R.id.exitButton);
+        Button cancel=(Button) findViewById(R.id.cancelButton);
 
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +61,7 @@ public class Login extends Activity {
             }
         });
 
-        exit.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 System.exit(0);

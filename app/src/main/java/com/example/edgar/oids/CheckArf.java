@@ -1,6 +1,8 @@
 package com.example.edgar.oids;
 
 //import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -30,7 +33,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
-public class Announcements extends ActionBarActivity {
+public class CheckArf extends ActionBarActivity {
 
     private DrawerLayout drawer;
     private ExpandableListView drawerList;
@@ -44,52 +47,111 @@ public class Announcements extends ActionBarActivity {
     private String username;
     private String level = null;
     ArrayList<String> array = new ArrayList();
+    ArrayAdapter<String> adapter;
+    private String title = null;
+    private String idNumber = null;
+    private ListView listView;
+    private ArrayList<String> listItems = new ArrayList();
+    private ArrayList<String> listIds = new ArrayList();
+    private String category = null;
+    private String arf_id = null;
+    private String type = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.announcements);
+        setContentView(R.layout.check_arf);
 
         username = getIntent().getExtras().getString("username");
+        level = getIntent().getExtras().getString("level");
+        category = getIntent().getExtras().getString("category");
+        type = getIntent().getExtras().getString("type");
 
         mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
-        getUserLevel();
         addDrawerItems();
-
-
 
         setupDrawer();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        final TextView t_check_arf = (TextView)findViewById(R.id.viewLogsTextView);
+        listView = (ListView)findViewById(R.id.listView);
+
+        if(level.equals("low")){
+            t_check_arf.setText("Check My A.R.F.s");
+        }
+
+        getArfs();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                arf_id = listIds.get(position);
+                goToArfDetails();
+            }
+        });
+
+
+
+
     }
 
-    private void getUserLevel(){
+    private void getArfs(){
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
         nameValuePairs.add(new BasicNameValuePair("user", username));
+        nameValuePairs.add(new BasicNameValuePair("level", level));
+        nameValuePairs.add(new BasicNameValuePair("category", category));
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
             //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_user_level.php");
-            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_user_level.php");
+            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_select_arf_submitted.php");
             //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_user_level.php");
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
 
             String result = EntityUtils.toString(entity, HTTP.UTF_8);
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            alertDialog.setMessage(result);
+
+            alertDialog.show();
+
             Log.e("pass 1", "connection success ");
             try {
                 JSONArray json_array = new JSONArray(result);
-                level = json_array.optString(0);
-
+                int modulus;
+                for (int i = 0; i < json_array.length(); i++) {
+                    modulus = i % 2;
+                    if(modulus == 0){
+                        idNumber = json_array.optString(i);
+                        listIds.add(idNumber);
+                    }
+                    else if(modulus == 1){
+                        title = json_array.optString(i);
+                        listItems.add(title);
+                    }
+                }
+                adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+                listView.setAdapter(adapter);
 
             } catch (Exception e) {
                 Log.e("Fail 2", e.toString());
+                Toast.makeText(getApplicationContext(), result,
+                        Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Log.e("Fail 1", e.toString());
@@ -250,13 +312,13 @@ public class Announcements extends ActionBarActivity {
         switch(position){
             case 0:
                 break;
-            case 1: goToCheckArfSubmitted(v);
+            case 1:
                 break;
-            case 2: goToCheckArfDrafts(v);
+            case 2:
                 break;
-            case 3: goToCheckArfForReEdit(v);
+            case 3:
                 break;
-            case 4: goToCheckArfRejected(v);
+            case 4:
                 break;
             case 5: goToCreateARF(v);
                 break;
@@ -348,7 +410,7 @@ public class Announcements extends ActionBarActivity {
                 break;
             case 4: goToAddUser(v);
                 break;
-            case 5: goToEdirUser(v);
+            case 5:
                 break;
             case 6: goToReset(v);
                 break;
@@ -363,57 +425,10 @@ public class Announcements extends ActionBarActivity {
         }
     }
 
-    private void goToCheckArfReceived(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","received");
-        intent.putExtra("type", "received");
-        intent.putExtra("position","position");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfSubmitted(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","submitted");
-        intent.putExtra("type", "submitted");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfDrafts(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","drafts");
-        intent.putExtra("type", "drafts");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfForReEdit(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","for re-edit");
-        intent.putExtra("type", "for-re-edit");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfRejected(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","rejected");
-        intent.putExtra("type", "rejected");
-        startActivity(intent);
-    }
-
     private void goToCreateARF(View v){
         Intent intent = new Intent(this,CreateARF.class);
         intent.putExtra("level", this.level);
         intent.putExtra("username",this.username);
-        intent.putExtra("category","create");
         startActivity(intent);
     }
 
@@ -428,14 +443,6 @@ public class Announcements extends ActionBarActivity {
         Intent intent = new Intent(this,AddUser.class);
         intent.putExtra("level", this.level);
         intent.putExtra("username",this.username);
-        startActivity(intent);
-    }
-
-    private void goToEditUser(View v){
-        Intent intent = new Intent(this,AddUser.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category", "edit");
         startActivity(intent);
     }
 
@@ -455,9 +462,19 @@ public class Announcements extends ActionBarActivity {
 
     private void gotoSignOut(View v){
         Intent i = getBaseContext().getPackageManager()
-                .getLaunchIntentForPackage(getBaseContext().getPackageName() );
+                .getLaunchIntentForPackage(getBaseContext().getPackageName());
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+    private void goToArfDetails(){
+        Intent intent = new Intent(this,CreateARF.class);
+        intent.putExtra("level", this.level);
+        intent.putExtra("username",this.username);
+        intent.putExtra("arf_id", arf_id);
+        intent.putExtra("category","arf details");
+        intent.putExtra("type",type);
+        startActivity(intent);
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.edgar.oids;
 
 //import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -12,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -26,11 +30,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Announcements extends ActionBarActivity {
+public class ChangePin extends ActionBarActivity {
 
     private DrawerLayout drawer;
     private ExpandableListView drawerList;
@@ -44,48 +48,124 @@ public class Announcements extends ActionBarActivity {
     private String username;
     private String level = null;
     ArrayList<String> array = new ArrayList();
+    private String oldPin;
+    private String newPin;
+    private String confirmPin;
+    private int code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.announcements);
+        setContentView(R.layout.change_pin);
 
         username = getIntent().getExtras().getString("username");
+        level = getIntent().getExtras().getString("level");
 
         mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
-        getUserLevel();
+        final EditText e_oldPin = (EditText)findViewById(R.id.oldPinEditText);
+        final EditText e_newPin = (EditText)findViewById(R.id.newPinEditText);
+        final EditText e_confirmPin = (EditText)findViewById(R.id.confirmNewPinEditText);
+
+        Button changePasswordButton = (Button)findViewById(R.id.changePinButton);
+
         addDrawerItems();
-
-
-
         setupDrawer();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                oldPin = e_oldPin.getText().toString();
+                newPin = e_newPin.getText().toString();
+                confirmPin = e_confirmPin.getText().toString();
+                changePassword();;
+            }
+        });
+
     }
 
-    private void getUserLevel(){
+    private void changePassword(){
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
         nameValuePairs.add(new BasicNameValuePair("user", username));
+        nameValuePairs.add(new BasicNameValuePair("old_pin", oldPin));
+        nameValuePairs.add(new BasicNameValuePair("new_pin", newPin));
+        nameValuePairs.add(new BasicNameValuePair("confirm_pin", confirmPin));
 
         try {
             HttpClient httpclient = new DefaultHttpClient();
-            //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_user_level.php");
-            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_user_level.php");
-            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_user_level.php");
+            //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_change_pin.php");
+            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_change_pin.php");
+            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_change_pin.php");
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();
 
             String result = EntityUtils.toString(entity, HTTP.UTF_8);
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.setMessage(result);
+            alertDialog.show();
+
             Log.e("pass 1", "connection success ");
             try {
-                JSONArray json_array = new JSONArray(result);
-                level = json_array.optString(0);
+                JSONObject json_data = new JSONObject(result);
+                code = json_data.getInt("code");
+
+                if(code == 1){
+                    Toast.makeText(getApplicationContext(), "Successfully Changed Password",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 2){
+                    Toast.makeText(getApplicationContext(), "Old PiIN must not be blank",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 3){
+                    Toast.makeText(getApplicationContext(), "New PIN must not be blank",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 4){
+                    Toast.makeText(getApplicationContext(), "Confirm PIN must not be blank",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 5){
+                    Toast.makeText(getApplicationContext(), "Old PIN and New PIN must not be blank",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 6){
+                    Toast.makeText(getApplicationContext(), "Old PIN, New PIN, Confirm PIN must not be blank",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 7){
+                    Toast.makeText(getApplicationContext(), "New PIN and Confirm PIN must not be blank",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 8){
+                    Toast.makeText(getApplicationContext(), "New PIN and Confirm PIN do not match",
+                            Toast.LENGTH_LONG).show();
+                }
+                else if(code == 8){
+                    Toast.makeText(getApplicationContext(), "PIN cannot be default",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Invalid",
+                            Toast.LENGTH_LONG).show();
+                }
+
 
 
             } catch (Exception e) {
@@ -250,17 +330,17 @@ public class Announcements extends ActionBarActivity {
         switch(position){
             case 0:
                 break;
-            case 1: goToCheckArfSubmitted(v);
+            case 1:
                 break;
-            case 2: goToCheckArfDrafts(v);
+            case 2:
                 break;
-            case 3: goToCheckArfForReEdit(v);
+            case 3:
                 break;
-            case 4: goToCheckArfRejected(v);
+            case 4:
                 break;
             case 5: goToCreateARF(v);
                 break;
-            case 6: goToChangePassword(v);
+            case 6:
                 break;
             case 7: gotoSignOut(v);
                 break;
@@ -284,7 +364,7 @@ public class Announcements extends ActionBarActivity {
                 break;
             case 6: goToCreateARF(v);
                 break;
-            case 7: goToChangePassword(v);
+            case 7:
                 break;
             case 8:
                 break;
@@ -324,7 +404,7 @@ public class Announcements extends ActionBarActivity {
                 break;
             case 13:
                 break;
-            case 14: goToChangePassword(v);
+            case 14:
                 break;
             case 15:
                 break;
@@ -336,7 +416,6 @@ public class Announcements extends ActionBarActivity {
     }
 
     private void goToTechOptions(int position){
-        View v = null;
         switch(position){
             case 0:
                 break;
@@ -346,108 +425,25 @@ public class Announcements extends ActionBarActivity {
                 break;
             case 3:
                 break;
-            case 4: goToAddUser(v);
+            case 4:
                 break;
-            case 5: goToEdirUser(v);
+            case 5:
                 break;
-            case 6: goToReset(v);
+            case 6:
                 break;
             case 7:
                 break;
-            case 8: goToChangePin(v);
+            case 8:
                 break;
             case 9:
                 break;
-            case 10: gotoSignOut(v);
+            case 10: View v = null; gotoSignOut(v);
                 break;
         }
     }
 
-    private void goToCheckArfReceived(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","received");
-        intent.putExtra("type", "received");
-        intent.putExtra("position","position");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfSubmitted(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","submitted");
-        intent.putExtra("type", "submitted");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfDrafts(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","drafts");
-        intent.putExtra("type", "drafts");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfForReEdit(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","for re-edit");
-        intent.putExtra("type", "for-re-edit");
-        startActivity(intent);
-    }
-
-    private void goToCheckArfRejected(View v){
-        Intent intent = new Intent(this,CheckArf.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","rejected");
-        intent.putExtra("type", "rejected");
-        startActivity(intent);
-    }
-
     private void goToCreateARF(View v){
         Intent intent = new Intent(this,CreateARF.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category","create");
-        startActivity(intent);
-    }
-
-    private void goToChangePassword(View v){
-        Intent intent = new Intent(this,ChangePassword.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        startActivity(intent);
-    }
-
-    private void goToAddUser(View v){
-        Intent intent = new Intent(this,AddUser.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        startActivity(intent);
-    }
-
-    private void goToEditUser(View v){
-        Intent intent = new Intent(this,AddUser.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        intent.putExtra("category", "edit");
-        startActivity(intent);
-    }
-
-    private void goToReset(View v){
-        Intent intent = new Intent(this,Reset.class);
-        intent.putExtra("level", this.level);
-        intent.putExtra("username",this.username);
-        startActivity(intent);
-    }
-
-    private void goToChangePin(View v){
-        Intent intent = new Intent(this,ChangePin.class);
         intent.putExtra("level", this.level);
         intent.putExtra("username",this.username);
         startActivity(intent);

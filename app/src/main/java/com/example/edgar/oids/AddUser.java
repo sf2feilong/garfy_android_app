@@ -75,6 +75,7 @@ public class AddUser extends ActionBarActivity {
     private String confirmBy = null;
     private String remarks;
     private int code;
+    private String category = null;
 
     private String[] studentArray = new String[]{"COURSE","BSIT","BSIE","BSTE","BSME","BSECE"};
     private String[] employeeArray = new String[]{"POSITION","TEACHER","STAFF","LIBRARY","SAO","GUIDANCE", "PASTORAL ANIMATOR",
@@ -90,6 +91,7 @@ public class AddUser extends ActionBarActivity {
 
         username = getIntent().getExtras().getString("username");
         level = getIntent().getExtras().getString("level");
+        category = getIntent().getExtras().getString("category");
 
         mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -234,7 +236,14 @@ public class AddUser extends ActionBarActivity {
                     userType = "employee";
                     extra = employeeArray[s_extra3.getSelectedItemPosition()];
                 }
-                insertUser();
+                else{}
+                if(category.equals("edit")){
+                    editUser();
+                }
+                else{
+                    insertUser();
+                }
+
             }
         });
 
@@ -332,6 +341,129 @@ public class AddUser extends ActionBarActivity {
                     case 21:Toast.makeText(getBaseContext(), "Missing Contact Number, Emergency First Name, Emergency Last Name",
                             Toast.LENGTH_SHORT).show(); break;
                     case 22:Toast.makeText(getBaseContext(), "Missing Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 111:Toast.makeText(getBaseContext(), "Successfully added Student",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 112:Toast.makeText(getBaseContext(), "Successfully added Employee",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 113:Toast.makeText(getBaseContext(), "Successfully added Chairperson",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 1111:Toast.makeText(getBaseContext(), "Successfully added Student & Log",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 1112:Toast.makeText(getBaseContext(), "Successfully added Employee & Log",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 1113:Toast.makeText(getBaseContext(), "Successfully added Chairperson & Log",
+                            Toast.LENGTH_SHORT).show(); break;
+                    default:Toast.makeText(getBaseContext(), result,
+                            Toast.LENGTH_SHORT).show();break;
+                }
+
+
+            } catch (Exception e) {
+                Log.e("Fail 2", e.toString());
+            }
+        } catch (Exception e) {
+            Log.e("Fail 1", e.toString());
+            Toast.makeText(getApplicationContext(), "Invalid IP Address",
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private void editUser(){
+        ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("user", username));
+        nameValuePairs.add(new BasicNameValuePair("id_number", idNumber));
+        nameValuePairs.add(new BasicNameValuePair("first_name", firstName));
+        nameValuePairs.add(new BasicNameValuePair("last_name", lastName));
+        nameValuePairs.add(new BasicNameValuePair("contact_number", contactNumber));
+        nameValuePairs.add(new BasicNameValuePair("e_first_name", eFirstName));
+        nameValuePairs.add(new BasicNameValuePair("e_last_name", eLastName));
+        nameValuePairs.add(new BasicNameValuePair("user_level", userLevel));
+        nameValuePairs.add(new BasicNameValuePair("user_type", userType));
+        nameValuePairs.add(new BasicNameValuePair("extra", extra));
+
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_insert_user.php");
+            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_insert_user.php");
+            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_insert_user.php");
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+
+            String result = EntityUtils.toString(entity, HTTP.UTF_8);
+
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+
+            alertDialog.setMessage(result);
+
+            alertDialog.show();
+
+
+
+            Toast.makeText(getBaseContext(), result,
+                    Toast.LENGTH_SHORT).show();
+
+            Log.e("pass 1", "connection success ");
+            try {
+                JSONObject json_data = new JSONObject(result);
+                code = json_data.getInt("code");
+
+                switch(code){
+                    case 1:Toast.makeText(getBaseContext(), "Successfully added User",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 2:Toast.makeText(getBaseContext(), "Missing Id Number",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 3:Toast.makeText(getBaseContext(), "Missing First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 4:Toast.makeText(getBaseContext(), "Missing Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 5:Toast.makeText(getBaseContext(), "Missing Contact Number",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 6:Toast.makeText(getBaseContext(), "Missing Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 7:Toast.makeText(getBaseContext(), "Missing Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 8:Toast.makeText(getBaseContext(), "Missing Id Number, First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 9:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 10:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name, Contact Number",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 11:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name, Contact Number, Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 12:Toast.makeText(getBaseContext(), "Missing Id Number, First Name, Last Name, Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 13:Toast.makeText(getBaseContext(), "Missing First Name, Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 14:Toast.makeText(getBaseContext(), "Missing First Name, Last Name, Contact Number",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 15:Toast.makeText(getBaseContext(), "Missing First Name, Last Name, Contact Number, Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 16:Toast.makeText(getBaseContext(), "Missing First Name, Last Name, Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 17:Toast.makeText(getBaseContext(), "Missing Last Name, Contact Number",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 18:Toast.makeText(getBaseContext(), "Missing Last Name, Contact Number, Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 19:Toast.makeText(getBaseContext(), "Missing Last Name, Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 20:Toast.makeText(getBaseContext(), "Missing Contact Number, Emergency First Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 21:Toast.makeText(getBaseContext(), "Missing Contact Number, Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 22:Toast.makeText(getBaseContext(), "Missing Emergency First Name, Emergency Last Name",
+                            Toast.LENGTH_SHORT).show(); break;
+                    case 23:Toast.makeText(getBaseContext(), "Successfully Edited User",
                             Toast.LENGTH_SHORT).show(); break;
                     case 111:Toast.makeText(getBaseContext(), "Successfully added Student",
                             Toast.LENGTH_SHORT).show(); break;

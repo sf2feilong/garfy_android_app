@@ -2,11 +2,9 @@ package com.example.edgar.oids;
 
 //import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -32,9 +30,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.ArrayList;
 
@@ -68,11 +64,11 @@ public class ChangePassword extends ActionBarActivity {
         mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
-        final EditText e_oldPass = (EditText)findViewById(R.id.oldPasswordEditText);
-        final EditText e_newPass = (EditText)findViewById(R.id.newPasswordEditText);
-        final EditText e_confirmPass = (EditText)findViewById(R.id.confirmNewPasswordEditText);
+        final EditText e_oldPass = (EditText)findViewById(R.id.oldPinEditText);
+        final EditText e_newPass = (EditText)findViewById(R.id.newPinEditText);
+        final EditText e_confirmPass = (EditText)findViewById(R.id.confirmNewPinEditText);
 
-        Button changePasswordButton = (Button)findViewById(R.id.changePasswordButton);
+        Button changePasswordButton = (Button)findViewById(R.id.changePinButton);
 
         addDrawerItems();
         setupDrawer();
@@ -103,8 +99,8 @@ public class ChangePassword extends ActionBarActivity {
         try {
             HttpClient httpclient = new DefaultHttpClient();
             //HttpPost httppost = new HttpPost("http://192.168.0.100/website_android/android_change_password.php");
-            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_user_level.php");
-            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_user_level.php");
+            HttpPost httppost = new HttpPost("http://192.168.0.101/website_android/android_change_password.php");
+            //HttpPost httppost = new HttpPost("http://10.0.2.2/website_android/android_change_password.php");
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity entity = response.getEntity();

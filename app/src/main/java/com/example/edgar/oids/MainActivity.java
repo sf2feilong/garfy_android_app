@@ -80,12 +80,17 @@ public class MainActivity extends ActionBarActivity {
                     goToLogin(view);
                 }
                 else if(position == 1){
-                    System.exit(0);
+                    terminate();
+
                 }
 
 
             }
         });
+    }
+
+    private void terminate(){
+        finish();
     }
 
     private void setupDrawer() {
