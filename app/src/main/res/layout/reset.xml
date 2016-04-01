@@ -8,7 +8,8 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:fillViewport="false">
 
 
         <LinearLayout
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Reset/Deactivate"
-                android:id="@+id/resetTextView"
+                android:id="@+id/viewLogsTextView"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
 
@@ -46,14 +47,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Find User"
-                    android:id="@+id/extraRadioButton1"
+                    android:id="@+id/findUserRadioButton"
                     android:checked="true" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Auto Load"
-                    android:id="@+id/extraRadioButton2" />
+                    android:id="@+id/autoLoadRadioButton" />
 
             </RadioGroup>
 
@@ -87,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Auto Load by:"
-                android:id="@+id/textView" />
+                android:id="@+id/autoLoadByTextView" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -106,36 +107,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Get Result"
-                    android:id="@+id/resultButton"
-                    />
+                    android:id="@+id/resultButton" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Result:"
+                    android:id="@+id/resultTextView" />
 
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="204dp"
+                    android:id="@+id/resultListView"
+                    android:clickable="false"
+                    android:isScrollContainer="true"
+                    android:smoothScrollbar="true"
+                    android:transcriptMode="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Selected:"
+                    android:id="@+id/selectedTextView" />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="197dp"
+                    android:id="@+id/selectListView" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Result:"
-                android:id="@+id/resultTextView" />
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/resultListView"
-                android:layout_gravity="center_horizontal"
-                android:clickable="false" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Selected:"
-                android:id="@+id/selectedTextView" />
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/selectListView" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -171,6 +175,13 @@
                 android:text="Cancel"
                 android:id="@+id/cancelButton"
                 android:layout_gravity="center_horizontal" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New CheckBox"
+                android:id="@+id/checkBox"
+                android:visibility="invisible" />
 
 
         </LinearLayout>

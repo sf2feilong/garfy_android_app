@@ -16,7 +16,7 @@
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/oldPinEditText"
-            android:hint="Old Password"
+            android:hint="Old PIN"
             android:layout_marginTop="120dp"
             android:layout_alignParentTop="true"
             android:layout_alignLeft="@+id/newPinEditText"
@@ -31,7 +31,7 @@
             android:layout_below="@+id/oldPinEditText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="33dp"
-            android:hint="New Password" />
+            android:hint="New PIN" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
             android:layout_below="@+id/newPinEditText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="35dp"
-            android:hint="Confirm Password" />
+            android:hint="Confirm New PIN" />
 
         <Button
             android:layout_width="wrap_content"
@@ -55,17 +55,17 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change Password"
+            android:text="Change PIN Code"
             android:id="@+id/changePinButton"
-            android:layout_below="@+id/requirementButton"
+            android:layout_below="@+id/requirementsButton"
             android:layout_centerHorizontal="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Change Password"
-            android:id="@+id/changePasswordTextView"
+            android:text="Change PIN"
+            android:id="@+id/changePinTextView"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp" />
@@ -74,10 +74,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Requirements"
-            android:id="@+id/requirementButton"
+            android:id="@+id/requirementsButton"
             android:layout_below="@+id/confirmNewPinEditText"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="62dp" />
+            android:layout_marginTop="63dp" />
     </RelativeLayout>
     <ListView
         android:id="@+id/navList"

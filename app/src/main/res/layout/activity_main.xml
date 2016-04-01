@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Public Announcements"
-        android:id="@+id/resetTextView"
+        android:id="@+id/viewLogsTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -29,7 +29,7 @@
         android:id="@+id/listView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/resetTextView" />
+        android:layout_below="@+id/viewLogsTextView" />
 
 </RelativeLayout>
     <ListView

@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Create A.R.F."
-            android:id="@+id/resetTextView"
+            android:id="@+id/viewLogsTextView"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
@@ -44,11 +44,11 @@
             android:layout_marginTop="50dp"
             android:hint="title"
             android:autoText="false"
-            android:layout_below="@+id/resetTextView"
+            android:layout_below="@+id/viewLogsTextView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/resetTextView"
-            android:layout_toStartOf="@+id/resetTextView" />
+            android:layout_toLeftOf="@+id/viewLogsTextView"
+            android:layout_toStartOf="@+id/viewLogsTextView" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:id="@+id/detailsEditText"
+            android:id="@+id/idNumberEditText"
             android:layout_below="@+id/titleEditText"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -84,7 +84,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Post To:"
             android:id="@+id/postToTextView"
-            android:layout_below="@+id/detailsEditText"
+            android:layout_below="@+id/idNumberEditText"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -95,7 +95,9 @@
             android:id="@+id/saoCheckBox"
             android:layout_below="@+id/postToTextView"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:enabled="true"
+            android:focusable="false" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -104,7 +106,8 @@
             android:id="@+id/facultyCheckBox"
             android:layout_below="@+id/saoCheckBox"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:checked="false" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -148,8 +151,8 @@
             android:text="Training &amp; Research"
             android:id="@+id/trcCheckBox"
             android:layout_above="@+id/facultyCheckBox"
-            android:layout_alignRight="@+id/detailsEditText"
-            android:layout_alignEnd="@+id/detailsEditText" />
+            android:layout_alignRight="@+id/idNumberEditText"
+            android:layout_alignEnd="@+id/idNumberEditText" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -256,7 +259,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Confirm By:"
-            android:id="@+id/confirmByTextView"
+            android:id="@+id/LogTypeTextView"
             android:layout_above="@+id/viewAllCheckBox"
             android:layout_alignLeft="@+id/bseceCheckBox"
             android:layout_alignStart="@+id/bseceCheckBox" />
@@ -269,8 +272,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/saoRadioButton"
             android:layout_alignTop="@+id/viewAllCheckBox"
-            android:layout_alignLeft="@+id/confirmByTextView"
-            android:layout_alignStart="@+id/confirmByTextView"
+            android:layout_alignLeft="@+id/LogTypeTextView"
+            android:layout_alignStart="@+id/LogTypeTextView"
             android:layout_alignRight="@+id/trcCheckBox"
             android:layout_alignEnd="@+id/trcCheckBox"
             android:layout_alignBottom="@+id/viewEmployeesCheckBox"
@@ -282,8 +285,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/pastoralRadioButton"
             android:layout_alignTop="@+id/viewAllCheckBox"
-            android:layout_alignLeft="@+id/confirmByTextView"
-            android:layout_alignStart="@+id/confirmByTextView"
+            android:layout_alignLeft="@+id/LogTypeTextView"
+            android:layout_alignStart="@+id/LogTypeTextView"
             android:layout_alignRight="@+id/trcCheckBox"
             android:layout_alignEnd="@+id/trcCheckBox"
             android:layout_alignBottom="@+id/viewEmployeesCheckBox"
@@ -294,8 +297,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/chairpersonRadioButton"
             android:layout_alignTop="@+id/viewAllCheckBox"
-            android:layout_alignLeft="@+id/confirmByTextView"
-            android:layout_alignStart="@+id/confirmByTextView"
+            android:layout_alignLeft="@+id/LogTypeTextView"
+            android:layout_alignStart="@+id/LogTypeTextView"
             android:layout_alignRight="@+id/trcCheckBox"
             android:layout_alignEnd="@+id/trcCheckBox"
             android:layout_alignBottom="@+id/viewEmployeesCheckBox"
@@ -306,8 +309,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/deanRadioButton"
             android:layout_alignTop="@+id/viewAllCheckBox"
-            android:layout_alignLeft="@+id/confirmByTextView"
-            android:layout_alignStart="@+id/confirmByTextView"
+            android:layout_alignLeft="@+id/LogTypeTextView"
+            android:layout_alignStart="@+id/LogTypeTextView"
             android:layout_alignRight="@+id/trcCheckBox"
             android:layout_alignEnd="@+id/trcCheckBox"
             android:layout_alignBottom="@+id/viewEmployeesCheckBox"
@@ -318,8 +321,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/rectorRadioButton"
             android:layout_alignTop="@+id/viewAllCheckBox"
-            android:layout_alignLeft="@+id/confirmByTextView"
-            android:layout_alignStart="@+id/confirmByTextView"
+            android:layout_alignLeft="@+id/LogTypeTextView"
+            android:layout_alignStart="@+id/LogTypeTextView"
             android:layout_alignRight="@+id/trcCheckBox"
             android:layout_alignEnd="@+id/trcCheckBox"
             android:layout_alignBottom="@+id/viewEmployeesCheckBox"
@@ -361,7 +364,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edit/Save"
-            android:id="@+id/EditSaveButton"/>
+            android:id="@+id/editSaveButton"/>
 
         <Button
             android:layout_width="match_parent"
@@ -386,7 +389,7 @@
             android:layout_height="wrap_content"
             android:text="Delete"
             android:id="@+id/deleteButton"
-            android:layout_below="@+id/EditSaveButton"
+            android:layout_below="@+id/editSaveButton"
             android:layout_toLeftOf="@+id/dateEditText"
             android:layout_toStartOf="@+id/dateEditText" />
 

@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Announcements"
+            android:text="Check A.R.F.s"
             android:id="@+id/viewLogsTextView"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
